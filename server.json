@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "com.tulimoa/directory",
+  "name": "com.tulimoa/platform",
   "title": "Tulimoa",
   "description": "Discover curated SaaS and AI-agent tools from the Tulimoa directory.",
   "version": "0.1.0",
