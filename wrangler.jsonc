@@ -1,0 +1,28 @@
+{
+  // Eigenständiger Worker: Tulimoa-MCP-Server (read-only Listings für Agents).
+  // Getrennt vom Next-Worker "tulimoa". Finale URL: https://mcp.tulimoa.com/mcp
+  "name": "tulimoa-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-15",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": false,
+  "observability": {
+    "logs": { "enabled": true }
+  },
+  // Rate-Limiting (per-colo, kein Auth nötig) — bewusst GROSSZUEGIG, reine Anti-Flood-Backstops.
+  // Normale Nutzung trifft die nie (bei ~100 Listings liegt fast alles im Edge-Cache). Bei Bedarf
+  // hier hochsetzen. RL_IP: 600 Requests/min/IP am /mcp-Endpoint. RL_DB: 3000 DB-Queries/min
+  // (Cap auf dem Supabase-Pfad, nur bei Cache-Miss) — schützt die geteilte DB + Hauptseite gegen Floods.
+  "ratelimits": [
+    { "name": "RL_IP", "namespace_id": "1001", "simple": { "limit": 600, "period": 60 } },
+    { "name": "RL_DB", "namespace_id": "1002", "simple": { "limit": 3000, "period": 60 } }
+  ],
+  // Finale URL von Anfang an. Wrangler legt Custom Domain + DNS beim Deploy an.
+  "routes": [{ "pattern": "mcp.tulimoa.com", "custom_domain": true }],
+  // Beide Werte sind public (Anon-Key, identisch zur Root-wrangler.jsonc).
+  // RLS gated den Anon-Key auf approved+published Listings. Keine Secrets.
+  "vars": {
+    "SUPABASE_URL": "https://hqwubccvjdekjqsgozfa.supabase.co",
+    "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxd3ViY2N2amRla2pxc2dvemZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MDY5MDgsImV4cCI6MjA5MzQ4MjkwOH0.3rFL3njIj_SHYuTvhsMkxFrb4uknTEscZ417KP1hJPo"
+  }
+}
