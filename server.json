@@ -1,0 +1,17 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.tulimoa/directory",
+  "title": "Tulimoa",
+  "description": "Discover curated SaaS and AI-agent tools from the Tulimoa directory.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/Tulimoa/tulimoa-mcp",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.tulimoa.com/mcp"
+    }
+  ]
+}

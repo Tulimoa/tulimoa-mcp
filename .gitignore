@@ -4,3 +4,9 @@ dist/
 .dev.vars
 .DS_Store
 *.log
+
+# MCP registry publishing — never commit the signing key or the CLI binary
+key.pem
+*.pem
+mcp-registry-auth
+mcp-publisher
