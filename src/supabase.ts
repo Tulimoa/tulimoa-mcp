@@ -12,3 +12,14 @@ export function makeSupabase(env: Env) {
 }
 
 export type SupabaseClient = ReturnType<typeof makeSupabase>;
+
+// Service-Role-Client. NUR fuer Auth-Token-Lookups (oauth_tokens) und Write-Tools (Insert/Update
+// mit explizit gesetzter owner_id) verwenden. Reads laufen weiter ueber den Anon-Client + Cache.
+// Umgeht RLS -> Isolation ist HIER die explizite owner_id/user_id-Assertion, nicht RLS.
+export function makeAdmin(env: Env) {
+  return createClient<Database>(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
+export type AdminClient = ReturnType<typeof makeAdmin>;

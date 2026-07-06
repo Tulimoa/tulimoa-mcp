@@ -1,22 +1,27 @@
-// Kopiert/getrimmt aus src/lib/{tags,countries,pricing-models}.ts, damit der
-// Worker keine Imports aus der Next-App braucht. Bei Vokabular-Änderungen hier
-// nachziehen (später: gemeinsames @tulimoa/domain-Package).
+// Kopiert/getrimmt aus src/lib/{categories,countries,pricing-models}.ts der
+// Next-App, damit der Worker keine Imports aus der App braucht. MUSS mit
+// src/lib/categories.ts dort 1:1 übereinstimmen (gleiche ids), sonst werfen
+// search/submit/edit „invalid enum". Bei Vokabular-Änderungen hier nachziehen
+// (später: gemeinsames @tulimoa/domain-Package).
 //
-// Hinweis: Das Tag-/Klassifikationssystem wird neu geplant (3-Achsen-Modell).
-// Dieser Worker klassifiziert bewusst nur über `category` + Facetten + Volltext.
+// Klassifikation §13: eine feste Primär-Kategorie (14 + Other), Single-Select.
 
 export const CATEGORIES = [
-  { id: "sales-crm", label: "Sales & CRM", labelDe: "Vertrieb & CRM" },
-  { id: "marketing", label: "Marketing", labelDe: "Marketing" },
-  { id: "communication", label: "Communication", labelDe: "Kommunikation" },
-  { id: "productivity", label: "Productivity", labelDe: "Produktivität" },
   { id: "developer-tools", label: "Developer Tools", labelDe: "Developer Tools" },
-  { id: "finance-ops", label: "Finance & Operations", labelDe: "Finanzen & Operations" },
-  { id: "hr-people", label: "HR & People", labelDe: "HR & People" },
-  { id: "customer-support", label: "Customer Support", labelDe: "Kundensupport" },
+  { id: "ai-infra", label: "AI Infrastructure & LLM Tools", labelDe: "KI-Infrastruktur & LLM-Tools" },
+  { id: "sales-crm", label: "Sales & CRM", labelDe: "Vertrieb & CRM" },
+  { id: "marketing", label: "Marketing & Growth", labelDe: "Marketing & Growth" },
+  { id: "productivity", label: "Productivity & Docs", labelDe: "Produktivität & Docs" },
   { id: "data-analytics", label: "Data & Analytics", labelDe: "Daten & Analytics" },
-  { id: "ai-infra", label: "AI Infrastructure", labelDe: "KI-Infrastruktur" },
-  { id: "compliance-hosting", label: "Compliance & Hosting", labelDe: "Compliance & Hosting" },
+  { id: "finance-accounting", label: "Finance & Accounting", labelDe: "Finanzen & Buchhaltung" },
+  { id: "customer-support", label: "Customer Support", labelDe: "Kundensupport" },
+  { id: "hr-recruiting", label: "HR & Recruiting", labelDe: "HR & Recruiting" },
+  { id: "design-creative", label: "Design & Creative", labelDe: "Design & Kreativ" },
+  { id: "security-privacy", label: "Security & Privacy", labelDe: "Security & Datenschutz" },
+  { id: "communication", label: "Communication & Collaboration", labelDe: "Kommunikation & Zusammenarbeit" },
+  { id: "commerce-payments", label: "Commerce & Payments", labelDe: "Commerce & Payments" },
+  { id: "automation-nocode", label: "Automation & No-Code", labelDe: "Automation & No-Code" },
+  { id: "other", label: "Other", labelDe: "Sonstiges" },
 ] as const;
 
 // Tuple der gültigen Kategorie-ids (= der in listings.category gespeicherte Wert).
