@@ -1,5 +1,5 @@
-import { createMcpHandler } from "agents/mcp";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { createMcpHandler } from "agents/mcp/server";
+import { McpServer } from "@modelcontextprotocol/server";
 import type { Env, McpUser } from "./types";
 import { registerAllTools } from "./tools";
 import { resolveMcpUser } from "./auth";
@@ -7,10 +7,17 @@ import { resolveMcpUser } from "./auth";
 const AUTH_ORIGIN = "https://auth.tulimoa.com";
 const MCP_RESOURCE = "https://mcp.tulimoa.com/mcp";
 
-// Pro Request frischer McpServer (SDK-Regel ab 1.26: kein Server-Reuse). user ist die schon
-// aufgeloeste Schreib-Identitaet (oder null = anonym); Reads ignorieren sie.
+// SEP-2549: Katalog + discover sind fuer alle identisch (Write-Gating passiert erst beim Call),
+// deshalb public/1h. Der Katalog aendert sich nur mit einem Deploy.
+const CATALOG_CACHE = { ttlMs: 3_600_000, cacheScope: "public" as const };
+
+// Pro Request frischer McpServer (Factory-Modell des v2-Handlers; gleiche Regel wie SDK 1.26+:
+// kein Server-Reuse). user ist die schon aufgeloeste Schreib-Identitaet (oder null = anonym).
 function createServer(env: Env, ctx: ExecutionContext, user: McpUser | null): McpServer {
-  const server = new McpServer({ name: "tulimoa", version: "1.1.0" });
+  const server = new McpServer(
+    { name: "tulimoa", version: "1.2.0" },
+    { cacheHints: { "tools/list": CATALOG_CACHE, "server/discover": CATALOG_CACHE } },
+  );
   registerAllTools(server, env, ctx, user);
   return server;
 }
@@ -18,14 +25,14 @@ function createServer(env: Env, ctx: ExecutionContext, user: McpUser | null): Mc
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version, Authorization",
+  "Access-Control-Allow-Headers": "Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version, Mcp-Method, Mcp-Name, Authorization",
   "Access-Control-Max-Age": "86400",
 };
 
 const corsOptions = {
   origin: "*",
   methods: "GET,POST,OPTIONS",
-  headers: "Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version, Authorization",
+  headers: "Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version, Mcp-Method, Mcp-Name, Authorization",
   maxAge: 86400,
 };
 
@@ -70,8 +77,14 @@ export default {
 
     // Schreib-Identitaet aufloesen (interner Gateway-Header ODER direkter OAuth-Bearer). Anonyme
     // Reads haben keine dieser Header -> user=null, kein DB-Hit. Pro Request frisch.
+    // Dual-Era (Default legacy:'stateless'): moderne 2026-07-28-Requests UND alte initialize-
+    // Clients laufen ueber denselben Handler; die Factory closed env/ctx/user pro Request ein.
     const user = await resolveMcpUser(env, request);
-    const server = createServer(env, ctx, user);
-    return createMcpHandler(server, { route: "/mcp", corsOptions })(request, env, ctx);
+    const handler = createMcpHandler(() => createServer(env, ctx, user), {
+      route: "/mcp",
+      corsOptions,
+      allowedOriginHostnames: "*", // oeffentlicher, authless-read MCP-Endpoint; CORS bleibt Wildcard wie bisher
+    });
+    return handler(request, env, ctx);
   },
 };

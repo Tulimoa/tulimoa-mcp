@@ -1,4 +1,5 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { CATEGORIES } from "../constants";
 
 export function registerListCategories(server: McpServer) {
@@ -9,7 +10,10 @@ export function registerListCategories(server: McpServer) {
       description:
         "List the category ids and labels used to classify Tulimoa listings. Call this first when " +
         "you need a valid `category` value for search_listings.",
-      inputSchema: {},
+      inputSchema: z.object({}),
+      outputSchema: z.object({
+        categories: z.array(z.object({ id: z.string(), label: z.string(), labelDe: z.string() })),
+      }),
     },
     async () => {
       const categories = CATEGORIES.map((c) => ({ id: c.id, label: c.label, labelDe: c.labelDe }));

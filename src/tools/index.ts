@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import type { Env, McpUser } from "../types";
 import { registerSearchListings } from "./search-listings";
 import { registerGetListing } from "./get-listing";

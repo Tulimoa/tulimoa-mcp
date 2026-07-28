@@ -1,11 +1,11 @@
 import { z } from "zod";
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { makeSupabase, type SupabaseClient } from "../supabase";
 import type { Env } from "../types";
 import { CATEGORY_IDS, EU_COUNTRY_CODES } from "../constants";
 import { cacheGet, cacheKeyFor, cachePut } from "../cache";
 
-const inputSchema = {
+const inputSchema = z.object({
   query: z
     .string()
     .min(1)
@@ -30,7 +30,27 @@ const inputSchema = {
     .optional()
     .describe("Result order. Default: popular."),
   limit: z.number().int().min(1).max(50).optional().describe("Max results (1-50, default 20)."),
-};
+});
+
+// Muss zur SELECT-Projektion passen; DB-seitig nullbare Felder defensiv nullish, damit die
+// Server-Validierung nie einen erfolgreichen Call abweist.
+const outputSchema = z.object({
+  count: z.number().int().describe("Number of results returned."),
+  results: z
+    .array(
+      z.looseObject({
+        slug: z.string(),
+        name: z.string(),
+        short_description: z.string().nullish(),
+        category: z.string().nullish(),
+        mcp: z.boolean().nullish(),
+        country: z.string().nullish(),
+        pricing_model: z.string().nullish(),
+        url: z.string().nullish(),
+      }),
+    )
+    .describe("Lean listing rows; call get_listing(slug) for full detail."),
+});
 
 type SearchArgs = {
   query?: string;
@@ -94,6 +114,7 @@ export function registerSearchListings(server: McpServer, env: Env, ctx: Executi
         "approved, published listings. Use this for any 'find/recommend a tool for X' request, " +
         "then call get_listing for full detail on a specific result.",
       inputSchema,
+      outputSchema,
     },
     async (args) => {
       const a = args as SearchArgs;

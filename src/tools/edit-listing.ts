@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { makeAdmin } from "../supabase";
 import { hasWrite } from "../auth";
 import type { Env, McpUser } from "../types";
@@ -9,7 +9,7 @@ function fail(text: string) {
   return { content: [{ type: "text" as const, text }], isError: true };
 }
 
-const inputSchema = {
+const inputSchema = z.object({
   slug: z.string().min(1).describe("Slug of YOUR listing to edit (from submit_listing)."),
   name: z.string().min(1).max(60).optional(),
   url: z.string().url().optional(),
@@ -18,7 +18,7 @@ const inputSchema = {
   mcp: z.boolean().optional(),
   pricing_model: z.enum(PRICING_MODELS).optional(),
   tags: z.array(z.string().min(1).max(40)).max(8).optional(),
-};
+});
 
 export function registerEditListing(server: McpServer, env: Env, _ctx: ExecutionContext, user: McpUser | null) {
   server.registerTool(
@@ -30,6 +30,11 @@ export function registerEditListing(server: McpServer, env: Env, _ctx: Execution
         "Any edit sends the listing back to admin review (status: pending) and it reappears publicly only after re-approval. " +
         "Requires a write-scoped Tulimoa login.",
       inputSchema,
+      outputSchema: z.object({
+        id: z.string().describe("Listing id."),
+        slug: z.string(),
+        status: z.literal("pending"),
+      }),
     },
     async (raw) => {
       if (!user) return fail("Authentication required to edit a listing.");

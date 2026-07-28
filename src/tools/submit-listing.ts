@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { makeAdmin } from "../supabase";
 import { hasWrite } from "../auth";
 import type { Env, McpUser } from "../types";
@@ -22,7 +22,7 @@ function fail(text: string) {
   return { content: [{ type: "text" as const, text }], isError: true };
 }
 
-const inputSchema = {
+const inputSchema = z.object({
   name: z.string().min(1).max(60).describe("Product/company name (max 60 chars)."),
   url: z.string().url().describe("Public homepage URL (https)."),
   short_description: z.string().min(1).max(300).describe("One-line pitch (max 300 chars)."),
@@ -32,7 +32,7 @@ const inputSchema = {
   // DB: listings.pricing_model ist NOT NULL (kein Default, kein Backfill-Trigger) -> Pflichtfeld.
   pricing_model: z.enum(PRICING_MODELS).describe("Pricing model (required): free | freemium | paid | lifetime."),
   tags: z.array(z.string().min(1).max(40)).max(8).optional().describe("Optional descriptive tags (max 8)."),
-};
+});
 
 export function registerSubmitListing(server: McpServer, env: Env, ctx: ExecutionContext, user: McpUser | null) {
   server.registerTool(
@@ -44,6 +44,11 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
         "The listing is created with status 'pending' and appears publicly only after admin review. " +
         "Requires a write-scoped Tulimoa login. Use list_categories first to pick a valid category id.",
       inputSchema,
+      outputSchema: z.object({
+        id: z.string().describe("Listing id."),
+        slug: z.string().describe("Final slug (may carry a conflict suffix)."),
+        status: z.literal("pending"),
+      }),
     },
     async (raw) => {
       if (!user) return fail("Authentication required. Connect with a Tulimoa account (write scope) to submit listings.");

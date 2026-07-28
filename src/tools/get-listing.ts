@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { makeSupabase } from "../supabase";
 import type { Env } from "../types";
 import { cacheGet, cacheKeyFor, cachePut } from "../cache";
@@ -40,9 +40,14 @@ export function registerGetListing(server: McpServer, env: Env, ctx: ExecutionCo
         "Fetch full detail of a single Tulimoa listing by its slug: long description, features, " +
         "use cases, integrations, pricing detail, and links. Use after search_listings when the " +
         "user wants depth on a specific tool.",
-      inputSchema: {
+      inputSchema: z.object({
         slug: z.string().min(1).max(120).describe("The listing's URL slug, e.g. 'acme-crm'."),
-      },
+      }),
+      outputSchema: z.object({
+        listing: z
+          .looseObject({ slug: z.string(), name: z.string() })
+          .describe("Full listing row (detail projection, see DETAIL_SELECT)."),
+      }),
     },
     async ({ slug }) => {
       const key = cacheKeyFor("listing", { slug });
