@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.tulimoa/gateway",
+  "title": "Tulimoa Gateway",
+  "description": "The MCP gateway with an EU-hosted, persistent memory layer that shrinks your token bill.",
+  "version": "1.2.0",
+  "websiteUrl": "https://tulimoa.com/gateway",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gateway.tulimoa.com/mcp"
+    }
+  ]
+}

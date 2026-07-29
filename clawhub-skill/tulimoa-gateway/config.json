@@ -1,0 +1,5 @@
+{
+  "name": "tulimoa-gateway",
+  "transport": "streamable-http",
+  "url": "https://gateway.tulimoa.com/mcp"
+}
