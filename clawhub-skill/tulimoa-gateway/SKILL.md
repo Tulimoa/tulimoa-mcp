@@ -2,7 +2,7 @@
 name: tulimoa-gateway
 description: Connect an agent to the Tulimoa MCP gateway — one EU-hosted endpoint that federates your connected SaaS tools and carries a persistent memory layer, so context (facts, IDs, goals, plans) survives across turns and sessions and the agent stops re-fetching and re-asking.
 homepage: https://tulimoa.com/gateway
-version: 1.0.0
+version: 1.2.0
 ---
 
 Use this skill when an agent should reach several SaaS tools through a single MCP endpoint AND keep working memory that survives context compaction and new sessions.
