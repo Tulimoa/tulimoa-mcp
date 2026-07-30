@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/server";
 import { makeAdmin } from "../supabase";
 import { hasWrite } from "../auth";
+import { sendSubmissionNotice } from "../email";
 import type { Env, McpUser } from "../types";
 import { CATEGORY_IDS, PRICING_MODELS } from "../constants";
 
@@ -118,6 +119,27 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
           })
           .then(() => undefined)
           .catch(() => undefined),
+      );
+
+      // Admin-Benachrichtigung (best-effort): Web-Submits mailen selbst, dieser Pfad deckt
+      // Agent-/MCP-Einreichungen ab, damit auch die in der Freigabe-Queue gemeldet werden.
+      ctx.waitUntil(
+        (async () => {
+          let submitterEmail: string | null = null;
+          try {
+            const { data } = await admin.auth.admin.getUserById(user.userId);
+            submitterEmail = data?.user?.email ?? null;
+          } catch {
+            // egal — dann ohne Absender-Mail benachrichtigen
+          }
+          await sendSubmissionNotice(env, {
+            id: inserted.id,
+            slug: inserted.slug,
+            name: args.name,
+            url: args.url,
+            submitterEmail,
+          });
+        })(),
       );
 
       return {

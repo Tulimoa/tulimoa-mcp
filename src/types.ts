@@ -13,6 +13,11 @@ export interface Env {
   // anon + gecacht. INTERNAL_MCP_SECRET = gleicher Wert wie im Gateway (interner Identitaets-Header).
   SUPABASE_SERVICE_ROLE: string;
   INTERNAL_MCP_SECRET: string;
+  // Resend fuer die Admin-Benachrichtigung bei neuen Listing-Einreichungen (via MCP/Agent).
+  // Fehlt der Key -> silent skip (best-effort, blockiert nie den Submit).
+  RESEND_API_KEY?: string;
+  RESEND_FROM_EMAIL?: string;
+  ADMIN_NOTIFY_EMAIL?: string;
 }
 
 // Aufgeloeste Schreib-Identitaet (aus internem Gateway-Header ODER direktem OAuth-Bearer).
