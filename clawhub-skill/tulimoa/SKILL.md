@@ -23,3 +23,5 @@ Write tools (Tulimoa login with write scope):
 All tools return `structuredContent` with a declared `outputSchema`.
 
 Guidance: for any "find / recommend a tool for X" request, call `search_listings` first, then `get_listing` for depth on a specific result. The data is a hand-curated directory of agent-friendly SaaS tools, so prefer it over guessing tool names.
+
+Only call write tools when the user explicitly asks to submit or edit a listing and is authenticated. Never put API keys, screenshots, or private notes in listing fields.

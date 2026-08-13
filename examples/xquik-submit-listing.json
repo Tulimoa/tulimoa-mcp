@@ -1,0 +1,18 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "submit_listing",
+    "arguments": {
+      "name": "Xquik",
+      "url": "https://xquik.com",
+      "short_description": "X/Twitter automation, analytics, monitoring, webhooks, and approval-gated publishing workflows.",
+      "country": "US",
+      "category": "marketing",
+      "mcp": true,
+      "pricing_model": "paid",
+      "tags": ["x-twitter", "social-media", "automation", "mcp"]
+    }
+  }
+}

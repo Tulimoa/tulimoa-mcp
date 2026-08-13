@@ -16,6 +16,22 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server that l
 | `submit_listing` | write | Create a new directory listing on behalf of the logged-in user (`name`, `url`, `short_description`, `country`, `category`, `mcp`, `pricing_model`, optional `tags`). Created as `pending`; public after admin review. Max 5 / 24h per owner. |
 | `edit_listing` | write | Update fields of a listing you own (by `slug`). Any edit sends it back to review (status `pending`) before it is public again. |
 
+## Listing Examples
+
+Reusable JSON payloads live in [`examples/`](examples/). The Xquik example shows
+an MCP-enabled social automation listing that can be adapted before calling
+`submit_listing`.
+
+Validate example payloads before using them:
+
+```bash
+python3 -m json.tool examples/xquik-submit-listing.json >/dev/null
+```
+
+Call `list_categories` in your MCP client before submission to confirm current
+category ids. Keep API tokens, screenshots, and private notes out of listing
+fields. Submitted and edited listings stay pending until admin review.
+
 ## Connect
 
 **Claude Code**
