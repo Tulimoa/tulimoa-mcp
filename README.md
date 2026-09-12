@@ -13,8 +13,8 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io) server that l
 | `search_listings` | none | Find tools by free-text `query`, `category`, `pricing_model` (free / freemium / paid / lifetime), `mcp` (tool has its own MCP server), `eu_only`, `sort` (new / popular / viewed), `limit`. Returns approved, published listings. |
 | `get_listing` | none | Full detail for one tool by its `slug`. |
 | `list_categories` | none | The category ids and labels used by `search_listings`. |
-| `submit_listing` | write | Create a new directory listing on behalf of the logged-in user (`name`, `url`, `short_description`, `country`, `category`, `mcp`, `pricing_model`, optional `tags`). Created as `pending`; public after admin review. Max 5 / 24h per owner. |
-| `edit_listing` | write | Update fields of a listing you own (by `slug`). Any edit sends it back to review (status `pending`) before it is public again. |
+| `submit_listing` | write | Create a new directory listing on behalf of the logged-in user (`name`, `url`, `short_description`, `country`, `category`, `mcp`, `pricing_model`, `logo_url`, optional `tags`). `logo_url` is required: a public https image URL (PNG, JPEG, WebP, GIF or AVIF, at least 64 px), scaled to max 512 px and stored as WebP. Created as `pending`; public after admin review. Max 5 / 24h per owner. |
+| `edit_listing` | write | Update fields of a listing you own (by `slug`), including a new `logo_url`. A listing without a logo needs one with the next edit. Any edit sends it back to review (status `pending`) before it is public again. |
 
 ## Connect
 

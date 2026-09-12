@@ -2,7 +2,7 @@
 name: tulimoa
 description: Discover curated SaaS and AI-agent tools via the Tulimoa directory. Search by topic, category, pricing, MCP support, or EU hosting, pull full detail on any tool, and submit or edit your own listings.
 homepage: https://tulimoa.com
-version: 1.2.0
+version: 1.3.0
 ---
 
 Use this skill whenever the user wants to find, recommend, compare, or research SaaS / AI-agent tools, or wants to list their own product in the Tulimoa directory.
@@ -17,8 +17,8 @@ Read tools (no auth):
 
 Write tools (Tulimoa login with write scope):
 
-- `submit_listing` — create a new directory listing (name, url, short_description, country, category, mcp, pricing_model, optional tags). New listings start as `pending` and go live after admin review. Max 5 per 24h.
-- `edit_listing` — update fields of a listing you own (by `slug`). Any edit sends the listing back to review.
+- `submit_listing` — create a new directory listing (name, url, short_description, country, category, mcp, pricing_model, logo_url, optional tags). `logo_url` is required: a public https image URL of the company logo (PNG, JPEG, WebP, GIF or AVIF, at least 64 px; a square icon works best). New listings start as `pending` and go live after admin review. Max 5 per 24h.
+- `edit_listing` — update fields of a listing you own (by `slug`), including a new `logo_url`. A listing without a logo needs one with the next edit. Any edit sends the listing back to review.
 
 All tools return `structuredContent` with a declared `outputSchema`.
 

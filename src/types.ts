@@ -9,6 +9,8 @@ export interface Env {
   SUPABASE_ANON_KEY: string;
   RL_IP: RateLimiter;
   RL_DB: RateLimiter;
+  // Cloudflare Images (Logo-Import: skalieren + WebP), siehe src/tools/logo.ts.
+  IMAGES: ImagesBinding;
   // Secrets (wrangler secret put). Service-Role NUR fuer Auth-Lookups + Write-Tools; Reads bleiben
   // anon + gecacht. INTERNAL_MCP_SECRET = gleicher Wert wie im Gateway (interner Identitaets-Header).
   SUPABASE_SERVICE_ROLE: string;

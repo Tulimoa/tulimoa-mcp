@@ -5,6 +5,7 @@ import { hasWrite } from "../auth";
 import { sendSubmissionNotice } from "../email";
 import type { Env, McpUser } from "../types";
 import { CATEGORY_IDS, PRICING_MODELS } from "../constants";
+import { LOGO_URL_HINT, importLogo, removeLogo } from "./logo";
 
 const MAX_LISTINGS_PER_DAY = 5;
 
@@ -32,6 +33,8 @@ const inputSchema = z.object({
   mcp: z.boolean().describe("true = this tool exposes its own MCP server."),
   // DB: listings.pricing_model ist NOT NULL (kein Default, kein Backfill-Trigger) -> Pflichtfeld.
   pricing_model: z.enum(PRICING_MODELS).describe("Pricing model (required): free | freemium | paid | lifetime."),
+  // Logo ist Pflicht wie im Web-Formular (submit/new/actions.ts: logo_required).
+  logo_url: z.string().url().describe(`Required. ${LOGO_URL_HINT}`),
   tags: z.array(z.string().min(1).max(40)).max(8).optional().describe("Optional descriptive tags (max 8)."),
 });
 
@@ -43,6 +46,7 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
       description:
         "Create a new listing in the Tulimoa directory on behalf of the authenticated user. " +
         "The listing is created with status 'pending' and appears publicly only after admin review. " +
+        "Every listing needs a logo: pass logo_url (a public image URL, e.g. the company's square icon). " +
         "Requires a write-scoped Tulimoa login. Use list_categories first to pick a valid category id.",
       inputSchema,
       outputSchema: z.object({
@@ -63,6 +67,7 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
         category: string;
         mcp: boolean;
         pricing_model: "free" | "freemium" | "paid" | "lifetime";
+        logo_url: string;
         tags?: string[];
       };
 
@@ -89,6 +94,9 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
         slug = `${base}-${i}`;
       }
 
+      const logo = await importLogo(env, admin, user.userId, args.logo_url);
+      if (!logo.ok) return fail(logo.error);
+
       const { data: inserted, error } = await admin
         .from("listings")
         .insert({
@@ -101,13 +109,17 @@ export function registerSubmitListing(server: McpServer, env: Env, ctx: Executio
           category: args.category,
           mcp: args.mcp,
           pricing_model: args.pricing_model,
+          logo_url: logo.url,
           tags: args.tags && args.tags.length ? args.tags.slice(0, 8) : [],
           status: "pending",
         })
         .select("id,slug")
         .single();
 
-      if (error || !inserted) return fail(`Submit failed: ${error?.message ?? "insert_failed"}`);
+      if (error || !inserted) {
+        ctx.waitUntil(removeLogo(admin, logo.path));
+        return fail(`Submit failed: ${error?.message ?? "insert_failed"}`);
+      }
 
       // Audit (R5, best-effort). Service-Role -> auth.uid() null -> append_audit erlaubt jede user_id.
       ctx.waitUntil(

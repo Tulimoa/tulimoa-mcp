@@ -15,7 +15,7 @@ const CATALOG_CACHE = { ttlMs: 3_600_000, cacheScope: "public" as const };
 // kein Server-Reuse). user ist die schon aufgeloeste Schreib-Identitaet (oder null = anonym).
 function createServer(env: Env, ctx: ExecutionContext, user: McpUser | null): McpServer {
   const server = new McpServer(
-    { name: "tulimoa", version: "1.2.0" },
+    { name: "tulimoa", version: "1.3.0" },
     { cacheHints: { "tools/list": CATALOG_CACHE, "server/discover": CATALOG_CACHE } },
   );
   registerAllTools(server, env, ctx, user);
