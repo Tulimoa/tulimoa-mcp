@@ -27,6 +27,16 @@ const DETAIL_SELECT = [
   "team_size",
   "logo_url",
   "view_count",
+  // Launch-Umbau 2026-10-03: KI-Einsatz und Datenpunkte (öffentlich auf der Listing-Seite).
+  "ai_usage",
+  "data_region",
+  "eu_hosted",
+  "hosting_provider",
+  "gdpr_dpa",
+  "agent_interfaces",
+  "model_source",
+  "trains_on_customer_data",
+  "certifications",
 ].join(",");
 
 const NOT_FOUND = "No published listing found";
@@ -37,9 +47,10 @@ export function registerGetListing(server: McpServer, env: Env, ctx: ExecutionCo
     {
       title: "Get one SaaS listing",
       description:
-        "Fetch full detail of a single Tulimoa listing by its slug: long description, features, " +
-        "use cases, integrations, pricing detail, and links. Use after search_listings when the " +
-        "user wants depth on a specific tool.",
+        "Fetch full detail of a single Tulimoa listing by its slug: long description, how it uses AI " +
+        "(ai_usage), features, use cases, integrations, pricing detail, data region and EU hosting, " +
+        "model source, certifications, and links. Use after search_listings when the user wants depth " +
+        "on a specific tool.",
       inputSchema: z.object({
         slug: z.string().min(1).max(120).describe("The listing's URL slug, e.g. 'acme-crm'."),
       }),

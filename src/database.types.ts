@@ -301,6 +301,27 @@ export type Database = {
           integrations: string | null
           last_badge_check_at: string | null
           logo_url: string | null
+          ai_usage: string | null
+          submitted_by: string | null
+          visibility_choice: string | null
+          launch_consent_at: string | null
+          data_region: string | null
+          hosting_provider: string | null
+          gdpr_dpa: boolean
+          agent_interfaces: string[]
+          model_source: string | null
+          trains_on_customer_data: string | null
+          certifications: string[]
+          x_handle: string | null
+          founder_x_handles: string[]
+          launch_hook: string | null
+          x_post_opt_in: boolean
+          mcp_docs_url: string | null
+          mcp_server_url: string | null
+          mcp_auth: string[] | null
+          eu_hosted: boolean
+          listing_fee_required: boolean
+          listing_fee_paid_at: string | null
           long_description: string | null
           mcp: boolean
           name: string
@@ -341,6 +362,27 @@ export type Database = {
           integrations?: string | null
           last_badge_check_at?: string | null
           logo_url?: string | null
+          ai_usage?: string | null
+          submitted_by?: string | null
+          visibility_choice?: string | null
+          launch_consent_at?: string | null
+          data_region?: string | null
+          hosting_provider?: string | null
+          gdpr_dpa?: boolean
+          agent_interfaces?: string[]
+          model_source?: string | null
+          trains_on_customer_data?: string | null
+          certifications?: string[]
+          x_handle?: string | null
+          founder_x_handles?: string[]
+          launch_hook?: string | null
+          x_post_opt_in?: boolean
+          mcp_docs_url?: string | null
+          mcp_server_url?: string | null
+          mcp_auth?: string[] | null
+          eu_hosted?: boolean
+          listing_fee_required?: boolean
+          listing_fee_paid_at?: string | null
           long_description?: string | null
           mcp: boolean
           name: string
@@ -381,6 +423,27 @@ export type Database = {
           integrations?: string | null
           last_badge_check_at?: string | null
           logo_url?: string | null
+          ai_usage?: string | null
+          submitted_by?: string | null
+          visibility_choice?: string | null
+          launch_consent_at?: string | null
+          data_region?: string | null
+          hosting_provider?: string | null
+          gdpr_dpa?: boolean
+          agent_interfaces?: string[]
+          model_source?: string | null
+          trains_on_customer_data?: string | null
+          certifications?: string[]
+          x_handle?: string | null
+          founder_x_handles?: string[]
+          launch_hook?: string | null
+          x_post_opt_in?: boolean
+          mcp_docs_url?: string | null
+          mcp_server_url?: string | null
+          mcp_auth?: string[] | null
+          eu_hosted?: boolean
+          listing_fee_required?: boolean
+          listing_fee_paid_at?: string | null
           long_description?: string | null
           mcp?: boolean
           name?: string
