@@ -2,7 +2,7 @@
 name: tulimoa
 description: Discover curated AI and MCP tools via the Tulimoa directory. Search by topic, category, pricing, MCP support, or EU hosting, pull full detail on any tool, and submit your own (free with the Tulimoa badge or a $5 launch package) or edit it.
 homepage: https://tulimoa.com
-version: 1.4.0
+version: 1.5.0
 ---
 
 Use this skill whenever the user wants to find, recommend, compare, or research SaaS / AI-agent tools, or wants to list their own product in the Tulimoa directory.
@@ -17,8 +17,8 @@ Read tools (no auth):
 
 Write tools (Tulimoa login with write scope):
 
-- `submit_listing` — create a new directory listing for AI or MCP software (name, url, short_description, country, category, mcp, pricing_model, logo_url, ai_usage, visibility, plus optional data points such as data_region, model_source, certifications, X handles). `logo_url` is required: a public https image URL of the company logo (PNG, JPEG, WebP, GIF or AVIF, at least 64 px; a square icon works best). `ai_usage` is required: 40 to 600 characters on how the software uses AI or what agents can do with it. `visibility` decides how it goes live: `badge` (free, embed the Tulimoa badge on the website, reviewed within 7 days; the result contains the badge HTML) or `launch` ($5 one-time, no badge, reviewed first, refunded if rejected; ask the user and pass `withdrawal_consent: true`, the result contains a `checkout_url` the user opens to pay). A website that is already listed is rejected. New listings start as `pending` and go live after admin review. Max 5 per 24h.
-- `edit_listing` — update fields of a listing you own (by `slug`), including a new `logo_url`, `ai_usage` and the optional data points. A listing without a logo needs one with the next edit. Any edit sends the listing back to review. Payment for the launch package happens on tulimoa.com, not via this tool.
+- `submit_listing` — create a new directory listing for AI or MCP software with the same fields and rules as the web form (https://tulimoa.com/submit/guidelines): name, url (own website), short_description, country, category, mcp, pricing_model, logo_url, ai_usage, visibility, plus the optional form fields (gallery_urls, content_blocks, founded_year, team_size, demo_url, docs_url, open_source, notable_customers, data_region, model_source, certifications, X handles, test_request). `logo_url` is required: a public https image URL of the company logo (PNG, JPEG, WebP, GIF or AVIF, at least 64 px; a square icon works best). `ai_usage` is required: 40 to 600 characters on how the software uses AI or what agents can do with it. `visibility` decides how it goes live: `badge` (free; the Tulimoa badge must already be embedded on the website, the tool checks it and returns the badge HTML if it is missing; reviewed within 7 days) or `launch` ($5 one-time, no badge, reviewed first, refunded if rejected; ask the user and pass `withdrawal_consent: true`, the result contains a `checkout_url` the user opens to pay). A website that is already listed is rejected. At most 2 active listings per account and 5 submissions per 24h. New listings start as `pending` and go live after admin review.
+- `edit_listing` — update fields of a listing you own (by `slug`) with the same rules as the web editor; only the fields you pass change. Changes to a live listing show right away and are checked afterwards; a changed MCP endpoint sends it back to review, and editing a rejected listing resubmits it when the rejection reason allows. A listing without a logo needs one with the next edit. Payment for the launch package happens on tulimoa.com, not via this tool.
 
 All tools return `structuredContent` with a declared `outputSchema`.
 

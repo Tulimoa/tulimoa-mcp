@@ -294,6 +294,10 @@ export type Database = {
           docs_url: string | null
           features: string[] | null
           founded_year: number | null
+          gallery_captions: string[] | null
+          notable_customers: string | null
+          open_source: boolean
+          submitted_via: string | null
           gallery_urls: string[] | null
           hero_url: string | null
           id: string
@@ -355,6 +359,10 @@ export type Database = {
           docs_url?: string | null
           features?: string[] | null
           founded_year?: number | null
+          gallery_captions?: string[] | null
+          notable_customers?: string | null
+          open_source?: boolean
+          submitted_via?: string | null
           gallery_urls?: string[] | null
           hero_url?: string | null
           id?: string
@@ -416,6 +424,10 @@ export type Database = {
           docs_url?: string | null
           features?: string[] | null
           founded_year?: number | null
+          gallery_captions?: string[] | null
+          notable_customers?: string | null
+          open_source?: boolean
+          submitted_via?: string | null
           gallery_urls?: string[] | null
           hero_url?: string | null
           id?: string

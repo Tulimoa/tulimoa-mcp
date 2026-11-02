@@ -3,7 +3,7 @@
   "name": "com.tulimoa/platform",
   "title": "Tulimoa",
   "description": "Find curated AI and MCP tools in the Tulimoa directory; submit yours free with a badge or for $5.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "repository": {
     "url": "https://github.com/Tulimoa/tulimoa-mcp",
     "source": "github"

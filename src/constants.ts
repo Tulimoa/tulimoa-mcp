@@ -36,3 +36,12 @@ export const EU_COUNTRY_CODES = [
   "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU",
   "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE",
 ];
+
+// Laender-Codes des Web-Formulars (Tulimoa/src/lib/countries.ts, COUNTRIES[].code). submit_listing
+// akzeptiert nur diese, wie das Formular (invalid_country). Bei neuen Laendern dort hier nachziehen.
+export const COUNTRY_CODES = [
+  "AR", "AU", "AT", "BE", "BR", "BG", "CA", "CL", "CN", "CO", "HR", "CY", "CZ", "DK", "EG", "EE",
+  "FI", "FR", "DE", "GR", "HK", "HU", "IS", "IN", "ID", "IE", "IL", "IT", "JP", "LV", "LI", "LT",
+  "LU", "MY", "MT", "MX", "MA", "NL", "NZ", "NG", "NO", "PE", "PH", "PL", "PT", "RO", "SA", "RS",
+  "SG", "SK", "SI", "ZA", "KR", "ES", "SE", "CH", "TW", "TH", "TR", "UA", "AE", "GB", "US", "VN",
+] as const;
